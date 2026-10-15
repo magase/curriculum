@@ -83,75 +83,95 @@
             box-shadow: 0 0 25px -5px rgba(20, 184, 166, 0.25);
         }
 
-        /* Print Optimization */
+        /* Print Optimization - Perfect A4 Document */
         @media print {
-            /* 1. Reset total de la página */
             @page {
                 size: A4;
-                margin: 10mm;
+                margin: 0; /* Controlamos márgenes en el div */
             }
 
+            /* Ocultar interfaz de la web */
             header, main, footer, #toast-container, .no-print {
                 display: none !important;
             }
 
+            /* Reset Body para impresión */
             body {
                 background: white !important;
-                color: #1e293b !important;
+                color: #000 !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                width: 100%;
-                font-size: 10pt; /* Reducción de fuente base para impresión */
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
-            /* 2. Forzar el modal a ocupar todo el espacio de impresión */
+            /* Forzar el modal a ser el documento principal */
             #cv-modal {
                 display: block !important;
                 position: static !important;
+                background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 overflow: visible !important;
+                width: 100% !important;
             }
 
+            /* Estructura de página A4 única */
             #cv-modal > div {
                 box-shadow: none !important;
                 border: none !important;
                 margin: 0 !important;
-                padding: 0 !important;
+                padding: 10mm 12mm !important; /* Margen ligeramente más ajustado */
                 width: 100% !important;
                 max-width: none !important;
+                border-radius: 0 !important;
+                height: auto !important; /* Cambiado de 297mm para evitar forzar saltos */
+                min-height: 297mm;
+                display: flex !important;
+                flex-direction: column !important;
             }
 
-            /* 3. Ajustes de contenido para que quepa en una hoja */
+            /* Ajustar espaciado crítico para que quepa en 1 hoja */
             .p-8, .p-12 { padding: 0 !important; }
+            .space-y-8 { space-y: 0 !important; margin-top: 0 !important; }
             .space-y-8 > :not([class*="hidden"]) ~ :not([class*="hidden"]) { margin-top: 1rem !important; }
             .space-y-6 > :not([class*="hidden"]) ~ :not([class*="hidden"]) { margin-top: 0.75rem !important; }
-            .space-y-5 > :not([class*="hidden"]) ~ :not([class*="hidden"]) { margin-top: 0.5rem !important; }
+            .space-y-5 > :not([class*="hidden"]) ~ :not([class*="hidden"]) { margin-top: 0.4rem !important; }
+            .space-y-4 > :not([class*="hidden"]) ~ :not([class*="hidden"]) { margin-top: 0.3rem !important; }
+            .space-y-3 > :not([class*="hidden"]) ~ :not([class*="hidden"]) { margin-top: 0.2rem !important; }
             
-            h1 { font-size: 20pt !important; margin-bottom: 2pt !important; }
-            h2 { font-size: 12pt !important; }
-            h3 { font-size: 10pt !important; margin-bottom: 4pt !important; border-bottom-width: 1px !important; }
+            /* Reducción estratégica de márgenes en títulos */
+            h1 { font-size: 22pt !important; margin-bottom: 0 !important; }
+            h2 { font-size: 12pt !important; margin-top: 0 !important; }
+            h3 { font-size: 11pt !important; border-bottom: 1pt solid #000 !important; padding-bottom: 2pt !important; margin-top: 10pt !important; margin-bottom: 6pt !important; }
             
-            .text-sm { font-size: 9pt !important; }
-            .text-xs { font-size: 8pt !important; }
+            /* Compactar listas de experiencia */
+            ul.list-disc li { margin-bottom: 1pt !important; }
+            .grid { gap: 12pt !important; }
             
-            /* Evitar saltos de página dentro de bloques */
-            .space-y-5 > div, .space-y-3 > div {
-                page-break-inside: avoid;
+            .text-sm { font-size: 9.5pt !important; line-height: 1.3 !important; }
+            .text-xs { font-size: 8.5pt !important; }
+            
+            /* Forzar a que no haya saltos de página huérfanos */
+            html, body {
+                height: 99%;
+                overflow: hidden;
+            }
+            
+            /* Quitar cualquier adorno innecesario */
+            .rounded, .rounded-xl, .rounded-2xl, .rounded-full {
+                border-radius: 0 !important;
+            }
+            
+            /* Asegurar que las listas se vean bien */
+            ul.list-disc {
+                padding-left: 15pt !important;
+                margin-top: 4pt !important;
             }
 
-            /* 4. Forzar grid de 2 columnas en impresión */
-            .grid-cols-12 {
-                display: grid !important;
-                grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-            }
-            .md\:col-span-8 { grid-column: span 8 / span 8 !important; }
-            .md\:col-span-4 { grid-column: span 4 / span 4 !important; }
-
-            /* 5. Colores */
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            /* Forzar visualización de iconos de contacto */
+            .fa-solid, .fa-regular {
+                color: #000 !important;
             }
         }
     </style>
@@ -1161,9 +1181,9 @@
                                         <span class="text-slate-500 font-normal">2025 - Actual</span>
                                     </div>
                                     <ul class="list-disc list-inside text-xs text-slate-700 mt-1 space-y-0.5">
-                                        <li>Diseño de entornos Backend para endpoints bancarios y migración legacy.</li>
-                                        <li>Refactorización de librerías, reducción de deuda técnica y TDD.</li>
-                                        <li>Gestión de tareas y liderazgo de equipos pequeños en Scrum.</li>
+                                        <li>Diseño de entornos <strong>Backend para endpoints bancarios</strong> críticos y migración de código legacy a nuevos estándares modernos de programación.</li>
+                                        <li>Refactorización de librerías complejas, <strong>reducción de deuda técnica e implementación de TDD</strong> (Test Driven Development) en entornos legacy para asegurar la estabilidad del sistema.</li>
+                                        <li>Gestión de tareas y <strong>liderazgo técnico de equipos pequeños</strong> especializados bajo metodologías Scrum, asegurando el cumplimiento de sprints y calidad de entrega.</li>
                                     </ul>
                                 </div>
 
@@ -1173,9 +1193,9 @@
                                         <span class="text-slate-500 font-normal">2025 - 2025</span>
                                     </div>
                                     <ul class="list-disc list-inside text-xs text-slate-700 mt-1 space-y-0.5">
-                                        <li>Gestión del ciclo de vida del software desde análisis a despliegue.</li>
-                                        <li>Desarrollo Full-Stack con Java, Spring Boot y Angular.</li>
-                                        <li>Microservicios, optimización Oracle DB y Jenkins.</li>
+                                        <li>Gestión integral del <strong>ciclo de vida del software</strong>, participando activamente desde el análisis de requisitos funcionales hasta el despliegue técnico final.</li>
+                                        <li>Desarrollo Full-Stack de soluciones robustas utilizando <strong>Java, Spring Boot (Backend) y Angular (Frontend)</strong> para la administración pública.</li>
+                                        <li>Diseño de microservicios, optimización de bases de datos relacionales Oracle y <strong>automatización de despliegues mediante Jenkins</strong> en entornos de integración continua.</li>
                                     </ul>
                                 </div>
 
@@ -1185,9 +1205,9 @@
                                         <span class="text-slate-500 font-normal">2024 - 2025</span>
                                     </div>
                                     <ul class="list-disc list-inside text-xs text-slate-700 mt-1 space-y-0.5">
-                                        <li>Migración de sistemas legacy (Java/ZK) a Spring Framework y Bootstrap.</li>
-                                        <li>Desarrollo evolutivo de aplicaciones de gestión fiscal.</li>
-                                        <li>CI/CD mediante Jenkins y pruebas unitarias/funcionales.</li>
+                                        <li><strong>Migración tecnológica de sistemas legacy</strong> desarrollados en Java/ZK hacia arquitecturas modernas basadas en Spring Framework y Bootstrap.</li>
+                                        <li>Desarrollo evolutivo y correctivo de aplicaciones web críticas de <strong>gestión fiscal</strong> bajo metodologías ágiles y estrictos controles de seguridad.</li>
+                                        <li>Implementación de pipelines <strong>CI/CD mediante Jenkins</strong> e integración sistemática de pruebas unitarias y funcionales para minimizar errores en producción.</li>
                                     </ul>
                                 </div>
 
@@ -1197,8 +1217,9 @@
                                         <span class="text-slate-500 font-normal">2023 - 2024</span>
                                     </div>
                                     <ul class="list-disc list-inside text-xs text-slate-700 mt-1 space-y-0.5">
-                                        <li>Desarrollo Full-Stack (Java/Spring, PHP/Laravel, VueJS) y Android.</li>
-                                        <li>APIs RESTful y microservicios en Docker y Azure.</li>
+                                        <li>Desarrollo Full-Stack multitecnología (<strong>Java/Spring, PHP/Laravel, VueJS</strong>) y diseño de aplicaciones móviles nativas para Android desarrolladas en Kotlin.</li>
+                                        <li>Diseño y gestión de <strong>APIs RESTful y arquitecturas de microservicios</strong> desplegados en entornos de contenedores Docker y la nube de Azure.</li>
+                                        <li>Colaboración activa en equipos multidisciplinares bajo marcos ágiles, cumpliendo con hitos y plazos de entrega en proyectos de alta complejidad.</li>
                                     </ul>
                                 </div>
 
@@ -1208,8 +1229,9 @@
                                         <span class="text-slate-500 font-normal">2020 - 2023</span>
                                     </div>
                                     <ul class="list-disc list-inside text-xs text-slate-700 mt-1 space-y-0.5">
-                                        <li>Desarrollo integral desde cero de ERP interno y app Android.</li>
-                                        <li>Backend Spring Framework y bases de datos en Azure.</li>
+                                        <li>Diseño y desarrollo integral desde cero de un <strong>sistema ERP interno</strong> corporativo y su extensión móvil simplificada para dispositivos Android.</li>
+                                        <li>Arquitectura Backend especializada con Spring Framework y <strong>optimización de bases de datos relacionales</strong> escalables en la nube Microsoft Azure.</li>
+                                        <li>Coordinación técnica de equipos pequeños, asumiendo la toma de decisiones tecnológicas y promoviendo la adopción de mejores prácticas.</li>
                                     </ul>
                                 </div>
                             </div>
