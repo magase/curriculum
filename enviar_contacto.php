@@ -16,17 +16,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Configuración del correo
     $destinatario = "garciaseva.manuel@gmail.com";
-    $asunto = "Nuevo mensaje de contacto: " . $asunto_usuario;
+    $asunto = "[Web Contacto] " . $asunto_usuario;
     
     $contenido = "Has recibido un nuevo mensaje desde tu portafolio web.\n\n";
+    $contenido .= "--------------------------------------------------\n";
     $contenido .= "Nombre: $nombre\n";
-    $contenido .= "Email: $email\n";
-    $contenido .= "Asunto: $asunto_usuario\n\n";
+    $contenido .= "Email del interesado: $email\n";
+    $contenido .= "Asunto: $asunto_usuario\n";
+    $contenido .= "--------------------------------------------------\n\n";
     $contenido .= "Mensaje:\n$mensaje_usuario\n";
 
-    // Cabeceras del correo
-    $headers = "From: Portafolio Web <no-reply@mgarciaseva.com>\r\n";
-    $headers .= "Reply-To: $email\r\n";
+    // Cabeceras para maximizar la entregabilidad
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/plain;charset=UTF-8" . "\r\n";
+    $headers .= "From: Formulario Manuel <simbad@simbad.net>" . "\r\n"; // Remitente autorizado
+    $headers .= "Reply-To: $email" . "\r\n"; // Al dar a responder, responderás al usuario
     $headers .= "X-Mailer: PHP/" . phpversion();
 
     // Enviar correo
