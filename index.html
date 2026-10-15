@@ -982,26 +982,26 @@
                                 <span>Enviar un mensaje directo</span>
                             </h4>
 
-                            <form id="contact-form" action="mailto:garciaseva.manuel@gmail.com" method="POST" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                            <form id="contact-form" class="space-y-4">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-mono text-slate-300 mb-1">Nombre</label>
-                                        <input type="text" required placeholder="Tu nombre" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors">
+                                        <input type="text" name="nombre" required placeholder="Tu nombre" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-mono text-slate-300 mb-1">Email</label>
-                                        <input type="email" required placeholder="tu@email.com" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors">
+                                        <input type="email" name="email" required placeholder="tu@email.com" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors">
                                     </div>
                                 </div>
 
                                 <div>
                                     <label class="block text-xs font-mono text-slate-300 mb-1">Asunto / Empresa</label>
-                                    <input type="text" required placeholder="Ej. Oportunidad laboral / Proyecto Web" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors">
+                                    <input type="text" name="asunto" required placeholder="Ej. Oportunidad laboral / Proyecto Web" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors">
                                 </div>
 
                                 <div>
                                     <label class="block text-xs font-mono text-slate-300 mb-1">Mensaje</label>
-                                    <textarea rows="4" required placeholder="Describe brevemente el proyecto u oportunidad..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors"></textarea>
+                                    <textarea rows="4" name="mensaje" required placeholder="Describe brevemente el proyecto u oportunidad..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-brand-500 transition-colors"></textarea>
                                 </div>
 
                                 <button type="submit" class="w-full py-3 px-6 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center gap-2">
@@ -1314,11 +1314,41 @@
         }
 
         // Contact Form Handler
-        function handleFormSubmit(event) {
+        async function handleFormSubmit(event) {
             event.preventDefault();
-            showToast("¡Mensaje enviado con éxito! Manuel te responderá lo antes posible.", "success");
-            event.target.reset();
+            const form = event.target;
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            // Deshabilitar botón mientras se envía
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Enviando...</span> <i class="fa-solid fa-spinner animate-spin"></i>';
+
+            try {
+                const response = await fetch('enviar_contacto.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    showToast("¡Mensaje enviado con éxito! Manuel te responderá lo antes posible.", "success");
+                    form.reset();
+                } else {
+                    showToast("Error: " + result.message, "error");
+                }
+            } catch (error) {
+                showToast("Hubo un error al conectar con el servidor.", "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Enviar Mensaje</span> <i class="fa-solid fa-paper-plane"></i>';
+            }
         }
+
+        // Listener para el formulario
+        document.getElementById('contact-form').addEventListener('submit', handleFormSubmit);
+
 
         // CV Modal Toggle
         function toggleCVModal() {
