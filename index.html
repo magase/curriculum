@@ -85,10 +85,35 @@
 
         /* Print Optimization */
         @media print {
+            /* Ocultar TODO por defecto */
+            body * { visibility: hidden; }
+            
+            /* Mostrar solo el contenedor del CV y sus hijos */
+            #cv-modal, #cv-modal * { visibility: visible; }
+            
+            /* Posicionar el CV al inicio de la página de impresión */
+            #cv-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                background: white !important;
+                visibility: visible;
+                display: block !important;
+            }
+
+            /* Forzar el fondo blanco y quitar efectos */
+            .max-w-4xl {
+                box-shadow: none !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
             .no-print { display: none !important; }
-            .print-only { display: block !important; }
             body { background: white !important; color: black !important; }
-            .glass-panel { background: none !important; border: none !important; backdrop-filter: none !important; }
         }
     </style>
 </head>
