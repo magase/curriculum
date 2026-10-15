@@ -1078,6 +1078,11 @@
                             </h4>
 
                             <form id="contact-form" class="space-y-4">
+                                <!-- Honeypot field (hidden from humans) -->
+                                <div class="hidden" aria-hidden="true">
+                                    <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+                                </div>
+
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-mono text-slate-300 mb-1">Nombre</label>

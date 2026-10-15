@@ -1,0 +1,39 @@
+# Portafolio Manuel García Seva - Configuración de Seguridad para Hostinger
+
+# 1. Forzar HTTPS y evitar ataques de intermediario
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 2. Bloquear acceso a archivos sensibles
+# Evita que alguien descargue el historial de Git o archivos de configuración
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Bloquear acceso al log de errores y otros archivos de sistema
+<FilesMatch "^(error_log|composer\.json|composer\.lock|README\.md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 3. Seguridad de Cabeceras (Hardening)
+# Prevenir que la web se cargue en un iframe (evita Clickjacking)
+Header set X-Frame-Options "DENY"
+
+# Prevenir que el navegador adivine el tipo MIME (evita ataques MIME-sniffing)
+Header set X-Content-Type-Options "nosniff"
+
+# Activar protección contra ataques XSS en navegadores antiguos
+Header set X-XSS-Protection "1; mode=block"
+
+# Referrer Policy: solo enviar referrer dentro del mismo sitio
+Header set Referrer-Policy "same-origin"
+
+# 4. Desactivar listado de directorios
+# Evita que alguien vea la lista de archivos si no hay un index.html
+Options -Indexes
+
+# 5. Configuración UTF-8 predeterminada
+AddDefaultCharset UTF-8

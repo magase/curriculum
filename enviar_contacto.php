@@ -1,11 +1,23 @@
 <?php
 header('Content-Type: application/json');
 
+// Función para limpiar cabeceras de email y evitar inyecciones
+function clean_header($data) {
+    return str_replace(array("\r", "\n", "%0a", "%0d"), '', $data);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recoger y sanitizar datos
-    $nombre = strip_tags(trim($_POST["nombre"]));
+    // 1. Honeypot (Protección Anti-Spam)
+    // Si el campo invisible 'website_url' tiene contenido, es un bot.
+    if (!empty($_POST["website_url"])) {
+        echo json_encode(["status" => "success", "message" => "Mensaje enviado correctamente (honeypot)."]);
+        exit;
+    }
+
+    // 2. Recoger y sanitizar datos
+    $nombre = clean_header(strip_tags(trim($_POST["nombre"])));
     $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
-    $asunto_usuario = strip_tags(trim($_POST["asunto"]));
+    $asunto_usuario = clean_header(strip_tags(trim($_POST["asunto"])));
     $mensaje_usuario = strip_tags(trim($_POST["mensaje"]));
 
     // Validaciones básicas
