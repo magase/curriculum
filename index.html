@@ -85,35 +85,48 @@
 
         /* Print Optimization */
         @media print {
-            /* Ocultar TODO por defecto */
-            body * { visibility: hidden; }
-            
-            /* Mostrar solo el contenedor del CV y sus hijos */
-            #cv-modal, #cv-modal * { visibility: visible; }
-            
-            /* Posicionar el CV al inicio de la página de impresión */
-            #cv-modal {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                background: white !important;
-                visibility: visible;
-                display: block !important;
+            /* 1. Ocultar absolutamente todo lo que no sea el CV */
+            header, main, footer, #toast-container, .no-print {
+                display: none !important;
             }
 
-            /* Forzar el fondo blanco y quitar efectos */
-            .max-w-4xl {
+            /* 2. Resetear el body para impresión */
+            body {
+                background: white !important;
+                color: black !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                display: block !important;
+                height: auto !important;
+                min-height: 0 !important;
+            }
+
+            /* 3. Convertir el modal en un elemento normal de flujo */
+            #cv-modal {
+                display: block !important;
+                position: static !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+                overflow: visible !important;
+                width: 100% !important;
+            }
+
+            /* 4. Ajustar el contenedor interno del CV */
+            #cv-modal > div {
                 box-shadow: none !important;
                 margin: 0 !important;
                 max-width: 100% !important;
                 width: 100% !important;
+                border: none !important;
+                border-radius: 0 !important;
             }
 
-            .no-print { display: none !important; }
-            body { background: white !important; color: black !important; }
+            /* 5. Asegurar que los colores se impriman */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
         }
     </style>
 </head>
